@@ -21,7 +21,10 @@
 	<resources mapping="/resources/static/font-awesome/css/*" location="/resources/static/font-awesome/css/" />	
 	<resources mapping="/resources/static/font-awesome/fonts/*" location="/resources/static/font-awesome/fonts/" />
 	<resources mapping="/resources/static/img/*" location="/resources/static/img/" />
-	
+	<resources mapping="/resources/js/*" location="/resources/js/" />
+	<resources mapping="/resources/css/*" location="/resources/css/" />
+	<resources mapping="/resources/fonts/*" location="/resources/fonts/" />
+	<resources mapping="/resources/images/*" location="/resources/images/" />
 	
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
 	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">

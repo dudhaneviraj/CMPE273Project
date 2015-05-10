@@ -161,6 +161,8 @@
 										
 										<label><h4>Course Name:</h4></label>${name[status.index]}<br>
 										<label><h4>Description:</h4></label>${description[status.index]}</li>
+										<label><h4>Target Audience:</h4></label>${targetAudience[status.index]}</li>
+										
 										</div>
 										 <div class="span8">										
 										<a href="${listValue}" target="_blank">

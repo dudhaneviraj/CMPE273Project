@@ -8,13 +8,13 @@ import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class LinkedinAuth {
-
-
-    public static String getAccessToken(String code)throws Exception
-    {
+	//linkedin access token
+	public static String getAccessToken(String code)throws Exception
+	{
 		URL obj = new URL("https://www.linkedin.com/uas/oauth2/accessToken");
 		HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
 		//add reuqest header
@@ -29,19 +29,19 @@ public class LinkedinAuth {
 		int responseCode = con.getResponseCode();
 		System.out.println("Post parameters : " + urlParameters);
 		System.out.println("Response Code : " + responseCode);
- 
+
 		BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
 		String inputLine;
 		StringBuffer response = new StringBuffer();
- 
+
 		while ((inputLine = in.readLine()) != null) {
 			response.append(inputLine);
 		}
 		in.close();
 		JSONObject js = new JSONObject(response.toString());
-    	return js.getString("access_token");
-    }
-	
+		return js.getString("access_token");
+	}
+	//Get Lenkedin Data
 	public static JSONObject getData(String url)throws Exception
 	{	
 		URL obj = new URL(url);
@@ -49,15 +49,54 @@ public class LinkedinAuth {
 		con.setRequestMethod("GET");
 		int responseCode = con.getResponseCode();
 		BufferedReader in = new BufferedReader(
-		        new InputStreamReader(con.getInputStream()));
+				new InputStreamReader(con.getInputStream()));
 		String inputLine;
 		StringBuffer response = new StringBuffer();
- 
+
 		while ((inputLine = in.readLine()) != null) {
 			response.append(inputLine);
 		}
 		in.close();	
 		return new JSONObject(response.toString());
+	}
+
+	//Fetch Users Education Level
+	public static int getEducationLevel(String token)
+	{
+		try {
+			System.out.println("dddddddddddddddddddddddddddddddd");
+			JSONObject json =LinkedinAuth.getData("https://api.linkedin.com/v1/people/~:(educations)?oauth2_access_token="+token+"&format=json");	
+			System.out.println("the String"+json.toString());
+			JSONObject educations=json.getJSONObject("educations");
+			JSONArray values=educations.getJSONArray("values");
+			int level=0;
+			for(int i=0;i<values.length();i++)
+			{
+				System.out.println("dddddddddddddddddddddddddddddddd");
+				String degree=values.getJSONObject(0).getString("degree");
+				System.out.println("degree:"+degree);
+				if(degree.toLowerCase().startsWith("d") || degree.toLowerCase().startsWith("m"))
+				{
+
+					return 2;
+				}	
+
+				if(degree.toLowerCase().startsWith("a") )
+				{
+					level=0;
+				}
+				if(degree.toLowerCase().startsWith("b") )
+				{
+					level=1;
+				}	
+			}
+			return level;
+
+		} catch (Exception e) {
+			
+			System.out.println("The Exception is:"+e);
+		}	
+		return 0;
 	}
 
 }
