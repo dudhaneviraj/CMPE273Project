@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import com.sun.org.apache.bcel.internal.generic.LNEG;
+
 /**
  * Handles requests for the application home page.
  */
@@ -27,6 +29,7 @@ import org.springframework.web.servlet.view.RedirectView;
 public class HomeController {
 	static String fixedtoken="AQWAdZEPCcz57sHHFsi50UPmvC1x6tolgQ6UP5cUirRX4AgkLZ3AAkkBUgKoHo34PUXETsoqz1bnJjzhYxxu-OXVy2pTG6sOmGefxWCiIcPKIWF18p34JxVwDB7oQm6kcA9nxtkkYdNGRM79WWM-OALTGmrl5O5zP_VE0eT6pkwK9x_YArQ";
 	static String linkedin_uri="https://www.linkedin.com/uas/oauth2/authorization?response_type=code&client_id=75gfml6z2nghgn&redirect_uri=http://localhost:8080/recommender/callback&state=DCEeFWf45A53sd";
+	static ModelAndView model=new ModelAndView("home").addObject("message", "Sorry! there Seems to be a Problem! Login Again!");
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public ModelAndView home() {
@@ -59,22 +62,35 @@ public class HomeController {
 		ModelAndView m=new ModelAndView("CourseSearch");
 		try 
 		{	
+			search=search.replaceAll(" ", "+");
 			json=CourseEraFetcher.getData("https://api.coursera.org/api/catalog.v1/courses?fields=language,shortDescription,largeIcon,targetAudience&q=search&query="+search);
 			System.out.println(json.toString());
 			JSONArray js=json.getJSONArray("elements");
 			for(int i=0;i<js.length();i++)
 			{
 				JSONObject it=js.getJSONObject(i);
-				if(it.has("targetAudience"))
+				if(level==0 || level == 1)
 				{
-					shortName.add("https://www.coursera.org/course/"+it.getString("shortName"));
-					name.add(it.getString("name"));
-					link.add(it.getString("largeIcon"));
-					description.add(it.getString("shortDescription"));
-				}	
-
-				if(it.has("targetAudience"))
-					targetAudience.add(it.getString("targetAudience"));
+					if(it.has("targetAudience") && Integer.parseInt(it.getString("targetAudience"))<=1)
+					{
+						shortName.add("https://www.coursera.org/course/"+it.getString("shortName"));
+						name.add(it.getString("name"));
+						link.add(it.getString("largeIcon"));
+						description.add(it.getString("shortDescription"));
+						targetAudience.add(it.getString("targetAudience"));
+					}	
+				}
+				else
+				{
+					if(it.has("targetAudience") && Integer.parseInt(it.getString("targetAudience"))<=1)
+					{
+						shortName.add("https://www.coursera.org/course/"+it.getString("shortName"));
+						name.add(it.getString("name"));
+						link.add(it.getString("largeIcon"));
+						description.add(it.getString("shortDescription"));
+						targetAudience.add(it.getString("targetAudience"));
+					}	
+				}
 			}
 			m.addObject("shortName", shortName);
 			m.addObject("name", name);
@@ -89,6 +105,11 @@ public class HomeController {
 			return m;
 		}
 	}
+
+
+
+
+
 
 	@RequestMapping(value="/callback")
 	@ResponseBody
@@ -109,8 +130,6 @@ public class HomeController {
 	@ResponseStatus(value=HttpStatus.OK)
 	public ModelAndView viewProfile(@RequestParam(value="token", required=true)String token)throws Exception
 	{		
-		
-		StackExchange.getRemainingSkills(token);
 		//Requesting User Data
 		JSONObject json =LinkedinAuth.getData("https://api.linkedin.com/v1/people/~:(id,first-name,skills,educations,languages,twitter-accounts,headline,lastName)?oauth2_access_token="+token+"&format=json");	
 		//Getting data from JSON
@@ -142,4 +161,91 @@ public class HomeController {
 		m.addObject("token", token);
 		return m;
 	}
+
+
+	//Get profile Data
+	@RequestMapping(value="/${token}/linkedinCourse")
+	@ResponseBody
+	@ResponseStatus(value=HttpStatus.OK)
+	public ModelAndView linkedinCourse(@RequestParam(value="token", required=true)String token)throws Exception
+	{		
+		try {
+			
+			ModelAndView m=new ModelAndView("linkedincourses");
+			ArrayList<String>shortName=new ArrayList<String>();
+			ArrayList<String>name=new ArrayList<String>();
+			ArrayList<String>link=new ArrayList<String>();
+			ArrayList<String>description=new ArrayList<String>();
+			ArrayList<String>targetAudience=new ArrayList<String>();
+
+
+			ArrayList<String> courseList=LinkedinAuth.getLinkedinCourses(token);
+
+			for(String search:courseList)
+			{
+				search=search.replaceAll(" ", "+");
+				JSONObject json=CourseEraFetcher.getData("https://api.coursera.org/api/catalog.v1/courses?fields=language,shortDescription,largeIcon,targetAudience&q=search&query="+search);
+				JSONArray js=json.getJSONArray("elements");
+				for(int i=0;i<js.length();i++)
+				{
+					JSONObject it=js.getJSONObject(i);
+					shortName.add("https://www.coursera.org/course/"+it.getString("shortName"));
+					name.add(it.getString("name"));
+					link.add(it.getString("largeIcon"));
+					description.add(it.getString("shortDescription"));
+				}
+			}
+
+			m.addObject("shortName", shortName);
+			m.addObject("name", name);
+			m.addObject("link", link);
+			m.addObject("description", description);
+			m.addObject("targetAudience", targetAudience);
+			m.addObject("token", token);
+			return m;
+
+			
+		} catch (Exception e) {
+			
+			return new ModelAndView("home").addObject("message", "Sorry! Something Went Wrong!");
+		}	
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	//Get profile Data
+	@RequestMapping(value="/{token}/trending")
+	@ResponseBody
+	@ResponseStatus(value=HttpStatus.OK)
+	public ModelAndView returnCourses(@PathVariable(value="token")String token)throws Exception
+	{
+		try {
+			String[] trending=StackExchange.getRemainingSkills(token);
+
+			ArrayList<JSONObject> jsonObject=new ArrayList<JSONObject>();
+
+			//	JSONObject json=CourseEraFetcher.getData("https://api.coursera.org/api/catalog.v1/courses?fields=language,shortDescription,largeIcon,targetAudience&q=search&query="+search);
+
+
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+
+
 }

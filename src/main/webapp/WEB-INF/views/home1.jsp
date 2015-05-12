@@ -22,14 +22,12 @@
 	media="screen" rel="stylesheet" />
 <link href="<c:url value="/resources/css/main.css"></c:url>"
 	rel="stylesheet" />
-
 <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!--[if lt IE 9]>
 	<script src="assets/js/html5shiv.js"></script>
 	<script src="assets/js/respond.min.js"></script>
 	<![endif]-->
 </head>
-
 <body class="home">
 	<!-- Fixed navbar -->
 	<div class="navbar navbar-inverse navbar-fixed-top headroom">
@@ -56,7 +54,6 @@
 						</ul>
 					</li> -->
 					<li><a href="contact.html">Contact</a></li>
-
 				</ul>
 			</div>
 			<!--/.nav-collapse -->
@@ -70,6 +67,7 @@
 			<div class="row">
 				<h1 class="lead">Coursera Course Recommendation</h1>
 				<p class="tagline">Find the best courses that match your skills</p>
+				<p class="tagline">${message}</p>
 				<p>
 					<a class="btn btn-action btn-lg" role="button"
 						href="${linkedin_uri}"><b>Sign In With Linkedin<b></a>

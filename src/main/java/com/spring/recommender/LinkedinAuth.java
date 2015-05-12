@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.ArrayList;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -64,7 +65,6 @@ public class LinkedinAuth {
 	public static int getEducationLevel(String token)
 	{
 		try {
-			System.out.println("dddddddddddddddddddddddddddddddd");
 			JSONObject json =LinkedinAuth.getData("https://api.linkedin.com/v1/people/~:(educations)?oauth2_access_token="+token+"&format=json");	
 			System.out.println("the String"+json.toString());
 			JSONObject educations=json.getJSONObject("educations");
@@ -72,7 +72,6 @@ public class LinkedinAuth {
 			int level=0;
 			for(int i=0;i<values.length();i++)
 			{
-				System.out.println("dddddddddddddddddddddddddddddddd");
 				String degree=values.getJSONObject(0).getString("degree");
 				System.out.println("degree:"+degree);
 				if(degree.toLowerCase().startsWith("d") || degree.toLowerCase().startsWith("m"))
@@ -97,6 +96,24 @@ public class LinkedinAuth {
 			System.out.println("The Exception is:"+e);
 		}	
 		return 0;
+	}
+	public static ArrayList<String> getLinkedinCourses(String token)
+	{
+		ArrayList<String> courseList=new ArrayList<String>();
+		try {
+			JSONObject json =LinkedinAuth.getData("https://api.linkedin.com/v1/people/~:(courses)?oauth2_access_token="+token+"&format=json");	
+			JSONObject courses=json.getJSONObject("courses");
+			JSONArray values=courses.getJSONArray("values");
+			for(int i=0;i<values.length();i++)
+			{
+				JSONObject temp=values.getJSONObject(i);
+				courseList.add(temp.getString("name"));
+			}
+			return courseList;
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return null;
 	}
 
 }
