@@ -20,7 +20,7 @@ public class LinkedinAuth {
 		HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
 		//add reuqest header
 		con.setRequestMethod("POST");
-		String urlParameters = "grant_type=authorization_code&code="+code+"&redirect_uri=http://localhost:8080/recommender/callback&client_id=75gfml6z2nghgn&client_secret=nUrGxW0YyT9lXdz4";
+		String urlParameters = "grant_type=authorization_code&code="+code+"&redirect_uri=http://ec2-52-8-150-31.us-west-1.compute.amazonaws.com:8080/recommender/callback&client_id=75gfml6z2nghgn&client_secret=nUrGxW0YyT9lXdz4";
 		// Send post request
 		con.setDoOutput(true);
 		DataOutputStream wr = new DataOutputStream(con.getOutputStream());

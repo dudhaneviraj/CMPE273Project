@@ -1,159 +1,196 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="">
-<meta name="author" content="">
-<title>Linkedin course Recommender</title>
-<!-- Optional theme -->
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+<meta name="author" content="Index Page for Course Recommendation">
 
-<!-- Latest compiled and minified JavaScript -->
-<script
-	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-<link
-	href="<c:url value="/resources/static/css/bootstrap.min.css"></c:url>"
+<title>Coursera-Recommendation</title>
+
+<link rel="shortcut icon" href="images/gt_favicon.png">
+
+<link rel="stylesheet" media="screen"
+	href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
+<link href="<c:url value="/resources/css/bootstrap.min.css"></c:url>"
 	rel="stylesheet" />
-<!-- Bootstrap Core CSS -->
-<!-- Custom CSS -->
-<link href="<c:url value="/resources/static/css/sb-admin.css"></c:url>"
+<link href="<c:url value="/resources/css/font-awesome.min.css"></c:url>"
 	rel="stylesheet" />
-<!-- Morris Charts CSS -->
-<link
-	href="<c:url value="/resources/static/css/plugins/morris.css"></c:url>"
+
+<!-- Custom styles for our template -->
+<link href="<c:url value="/resources/css/bootstrap-theme.css" ></c:url>"
+	media="screen" rel="stylesheet" />
+<link href="<c:url value="/resources/css/main.css"></c:url>"
 	rel="stylesheet" />
-<!-- Custom Fonts -->
-<link
-	href="<c:url value="/resources/static/font-awesome/css/font-awesome.min.css"></c:url>"
-	rel="stylesheet" type="text/css" />
-<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+
+<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
+	<script src="assets/js/html5shiv.js"></script>
+	<script src="assets/js/respond.min.js"></script>
+	<![endif]-->
 </head>
-<body>
-<body>
-	<div id="wrapper">
-		<!-- Navigation -->
-		<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-			<!-- Brand and toggle get grouped for better mobile display -->
+
+<body class="home">
+	<!-- Fixed navbar -->
+	<div class="navbar navbar-inverse navbar-fixed-top headroom">
+		<div class="container">
 			<div class="navbar-header">
+				<!-- Button for smallest screens -->
 				<button type="button" class="navbar-toggle" data-toggle="collapse"
-					data-target=".navbar-ex1-collapse">
-					<span class="sr-only">Toggle navigation</span> <span
-						class="icon-bar"></span> <span class="icon-bar"></span> <span
+					data-target=".navbar-collapse">
+					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="/recommender/">Linkedin Course
-					Recommender</a>
+				<a class="navbar-brand" href="/recommender/"><img
+					src="<c:url value="/resources/images/logo2.png"></c:url>"
+					alt="Course Recommender"> Course Recommender </a>
+
 			</div>
-			<!-- Top Menu Items -->
-			<ul class="nav navbar-right top-nav">
-				<li class="button"><br />
-
-					<form action="https://www.linkedin.com/uas/oauth2/authorization"
-						method="get">
-						<input type="hidden" name="response_type" value="code" /> <input
-							type="hidden" name="client_id" value="75gfml6z2nghgn" /> <input
-							type="hidden" name="redirect_uri"
-							value="http://localhost:8080/recommender/callback" /> <input
-							type="hidden" name="state" value="DCEeFWf45A53sd" /> <input
-							type="image"
-							src="<c:url value="/resources/static/img/Sign-In.png"></c:url>"
-							border="0" width=200 heigth=100 alt="Submit" />
-
-					</form></li>
-			</ul>
-			>
-			<!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
-			<div class="collapse navbar-collapse navbar-ex1-collapse">
-				<ul class="nav navbar-nav side-nav">
-					<br>
-					<li>
-
-						<form id="custom-search-form"
-							class="form-search form-horizontal pull-right"
-							action="/recommender/coursesearch/" method="GET">
-							<div class="input-append span12">
-								<input id=search name="search" type="text"
-									class="search-query mac-style" placeholder="Search Courses">
-								<button name="submit" type="submit" class="btn">
-									<i class="icon-search"></i>
-									</buttom>
-							</div>
-						</form>
-
-					</li>
+			<div class="navbar-collapse collapse">
+				<ul class="nav navbar-nav pull-right">
+					<li class="active"><a href="/recommender/">Home</a></li>
+					<li><a href="/recommender/121/about">About</a></li>
+					<li><a href="/recommender/121/contact">Contact</a></li>
 				</ul>
 			</div>
-			<!-- /.navbar-collapse -->
-		</nav>
-
-		<div id="page-wrapper">
-
-			<div class="container-fluid">
-
-				<!-- Page Heading -->
-				<div class="row">
-					<div class="col-lg-12">
-						<h1 class="page-header">
-							Course Recommender Home <small>With Profile Data From
-								@Linkedin</small>
-						</h1>
-						<ol class="breadcrumb">
-							<li class="button"><br />
-
-								<form action="https://www.linkedin.com/uas/oauth2/authorization"
-									method="get">
-									<input type="hidden" name="response_type" value="code" /> <input
-										type="hidden" name="client_id" value="75gfml6z2nghgn" /> <input
-										type="hidden" name="redirect_uri"
-										value="http://localhost:8080/recommender/callback" /> <input
-										type="hidden" name="state" value="DCEeFWf45A53sd" />
-
-									<c> <input type="image"
-										src="<c:url value="/resources/static/img/Sign-In.png"></c:url>"
-										border="0" width=400 heigth=600 alt="Submit" /> </c>
-								</form></li>
-						</ol>
-					</div>
-				</div>
-				<!-- /.row -->
-			</div>
-			<!-- /.container-fluid -->
-
+			<!--/.nav-collapse -->
 		</div>
-		<!-- /#page-wrapper -->
-
 	</div>
+	<!-- /.navbar -->
 
-	<!-- jQuery -->
-	<script src="<c:url value="/resources/static/js/jquery.js"></c:url>"></script>
+	<!-- Header -->
+	<header id="head">
+		<div class="container">
+			<div class="row">
+				<h1 class="lead" style="color:black"><b>Coursera Course Recommendation<b></h1>
+				<h2><p class="tagline" style="color:black">Find the best courses that match your skills</p></h2>
+				<p>
+					<a class="btn btn-action btn-lg" role="button"
+						href="${linkedin_uri}"><b>Sign In With Linkedin<b></a>
+				</p>
+			</div>
+		</div>
+	</header>
+	<!-- /Header -->
+	<!-- Intro -->
+	<div class="container text-center">
+		<br> <br>
+		<h2 class="thin" style="color:black">The best place to find the Coursera Courses that
+			best Match your skills</h2>
+		<p class="text-muted">
+			We strive to give you the best results<br>
 
-	<!-- Bootstrap Core JavaScript -->
-	<script
-		src="<c:url value="/resources/static/js/bootstrap.min.js"></c:url>">
-		
-	</script>
+		</p>
+	</div>
+	<!-- /Intro-->
 
-	<!-- Morris Charts JavaScript -->
-	<script
-		src="<c:url value="/resources/static/js/plugins/morris/raphael.min.js"></c:url>">
-		
-	</script>
-	<script
-		src="<c:url value="/resources/static/js/plugins/morris/morris.min.js"></c:url>">
-		
-	</script>
-	<script
-		src="<c:url value="/resources/static/js/plugins/morris/morris-data.js"></c:url>"></script>
+	<!--  -->
 
+
+
+	<!-- Social links. @TODO: replace by link/instructions in template -->
+	<section id="social">
+		<div class="container">
+			<div class="wrapper clearfix">
+				<!-- AddThis Button BEGIN -->
+				<div class="addthis_toolbox addthis_default_style">
+					<a class="addthis_button_facebook_like"
+						fb:like:layout="button_count"></a> <a class="addthis_button_tweet"></a>
+					<a class="addthis_button_linkedin_counter"></a> <a
+						class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+				</div>
+				<!-- AddThis Button END -->
+			</div>
+		</div>
+	</section>
+	<!-- /social links -->
+
+
+	<footer id="footer" class="top-space">
+
+		<div class="footer1">
+			<div class="container">
+				<div class="row">
+
+					<div class="col-md-3 widget">
+						<h3 class="widget-title">Contact</h3>
+						<div class="widget-body">
+							<p>
+								(408) 952-9749<br> <a href="mailto:#">courserateam@gmail.com</a><br>
+								<br> San Jose State University, San Jose- CA
+							</p>
+						</div>
+					</div>
+
+					<div class="col-md-3 widget">
+						<h3 class="widget-title">Follow me</h3>
+						<div class="widget-body">
+							<p class="follow-me-icons">
+								<a href=""><i class="fa fa-twitter fa-2"></i></a> <a href=""><i
+									class="fa fa-dribbble fa-2"></i></a> <a href=""><i
+									class="fa fa-github fa-2"></i></a> <a href=""><i
+									class="fa fa-facebook fa-2"></i></a>
+							</p>
+						</div>
+					</div>
+
+					<!-- <div class="col-md-6 widget">
+						<h3 class="widget-title">Text widget</h3>
+						<div class="widget-body">
+							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Excepturi, dolores, quibusdam architecto voluptatem amet fugiat nesciunt placeat provident cumque accusamus itaque voluptate modi quidem dolore optio velit hic iusto vero praesentium repellat commodi ad id expedita cupiditate repellendus possimus unde?</p>
+							<p>Eius consequatur nihil quibusdam! Laborum, rerum, quis, inventore ipsa autem repellat provident assumenda labore soluta minima alias temporibus facere distinctio quas adipisci nam sunt explicabo officia tenetur at ea quos doloribus dolorum voluptate reprehenderit architecto sint libero illo et hic.</p>
+						</div>
+					</div>
+ -->
+				</div>
+				<!-- /row of widgets -->
+			</div>
+		</div>
+
+		<div class="footer2">
+			<div class="container">
+				<div class="row">
+
+					<div class="col-md-6 widget">
+						<div class="widget-body">
+							<p class="simplenav">
+								<a href="#">Home</a> | <a href="about.jsp">About</a> | <a
+									href="contact.jsp">Contact</a> |
+							</p>
+						</div>
+					</div>
+
+					<div class="col-md-6 widget">
+						<div class="widget-body">
+							<p class="text-right">
+								Copyright &copy; 2015, SJSU Team. Designed by <a href="#"
+									rel="designer">Team</a>
+							</p>
+						</div>
+					</div>
+
+				</div>
+				<!-- /row of widgets -->
+			</div>
+		</div>
+
+	</footer>
+
+
+
+
+
+	<!-- JavaScript libs are placed at the end of the document so the pages load faster -->
+	<script
+		src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script
+		src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+	<script src="<c:url value="/resources/js/headroom.min.js"></c:url>"></script>
+	<script
+		src="<c:url value="/resources/js/jQuery.headroom.min.js"></c:url>"></script>
+	<script src="<c:url value="/resources/js/template.js"></c:url>"></script>
 </body>
-
 </html>

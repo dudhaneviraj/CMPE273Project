@@ -24,6 +24,7 @@ import com.mongodb.DBCursor;
 @Component
 @EnableScheduling
 public class StackExchange {	
+	
 	@Scheduled(fixedRate=1000*3600*24)
 	public void GetPopularTags()
 	{
@@ -79,7 +80,7 @@ public class StackExchange {
 		}	
 	}
 	
-	public static String[] getRemainingSkills(String token)
+	public static ArrayList<String> getRemainingSkills(String token)
 	{
 		try
 		{
@@ -114,11 +115,9 @@ public class StackExchange {
 					tags.remove(sk.toLowerCase());
 				}
 			}
+			
+			return tags;
 			//Display tags
-			for(String sk:tags)
-			{
-				System.out.println("Ramaining tags"+sk);
-			}
 		} 
 		catch (Exception e)
 		{

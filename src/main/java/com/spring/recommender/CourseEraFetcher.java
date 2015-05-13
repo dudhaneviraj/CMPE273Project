@@ -58,21 +58,30 @@ public class CourseEraFetcher {
 		ModelAndView m=new ModelAndView("/pages/index");
 		return m;
 	}
-	public static JSONObject getData(String url)throws Exception
+	public static JSONObject getData(String url)
 	{	
-		URL obj = new URL(url);
-		HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
-		con.setRequestMethod("GET");
-		int responseCode = con.getResponseCode();
-		BufferedReader in = new BufferedReader(
-				new InputStreamReader(con.getInputStream()));
-		String inputLine;
-		StringBuffer response = new StringBuffer();
+		try {
+			URL obj = new URL(url);
+			HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
+			con.setRequestMethod("GET");
+			int responseCode = con.getResponseCode();
+			BufferedReader in = new BufferedReader(
+					new InputStreamReader(con.getInputStream()));
+			String inputLine;
+			StringBuffer response = new StringBuffer();
 
-		while ((inputLine = in.readLine()) != null) {
-			response.append(inputLine);
+			while ((inputLine = in.readLine()) != null) {
+				response.append(inputLine);
+			}
+			in.close();	
+			return new JSONObject(response.toString());
+
+
+		} catch (Exception e) {
+			// TODO: handle exception
+			return null;
 		}
-		in.close();	
-		return new JSONObject(response.toString());
+		
+		
 	}
 }
